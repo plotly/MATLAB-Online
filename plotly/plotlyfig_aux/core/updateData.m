@@ -11,6 +11,8 @@ try
             updateImage(obj, dataIndex);
         case 'line'
             updateLineseries(obj, dataIndex);
+        case 'histogram'
+            updateHistogram(obj,dataIndex);
         case 'patch'
             % check for histogram
             if isHistogram(obj,dataIndex)

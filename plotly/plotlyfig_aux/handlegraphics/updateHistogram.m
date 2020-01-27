@@ -83,11 +83,33 @@ obj.data{histIndex}.histfunc= 'count';
 
 %-------------------------------------------------------------------------%
 
-orientation = histogramOrientation(hist_data);
+if isfield(hist_data, 'Orientation')
+  %-Matlab 2014+ histogram() function-%
+  orientation = hist_data.Orientation;
+else
+  %-Matlab <2014 hist() function-%
+  orientation = histogramOrientation(hist_data);
+end
 
 switch orientation
-    case 'v'
+    case {'vertical', 'horizontal'}
+        % histogram()
+
+        obj.data{histIndex}.x = sort(hist_data.Data.');
+        obj.data{histIndex}.autobinx = false;
         
+        obj.data{histIndex}.xbins.start = hist_data.BinEdges(1);
+        obj.data{histIndex}.xbins.end   = hist_data.BinEdges(end);
+        obj.data{histIndex}.xbins.size  = mean(hist_data.BinEdges(2:end)-hist_data.BinEdges(1:end-1));
+
+        %-------------------------------------------------------------------------%
+        
+        %-layout bargap-%
+        obj.layout.bargap = 0;
+        
+        %-------------------------------------------------------------------------%
+
+    case 'v'
         %-hist x data-%
         xdata = mean(hist_data.XData(2:3,:));
         
@@ -97,7 +119,7 @@ switch orientation
         xlength = 0;
         for d = 1:length(xdata)
             obj.data{histIndex}.x(xlength + 1: xlength + hist_data.YData(2,d)) = repmat(xdata(d),1,hist_data.YData(2,d));
-            xlength = length(obj.data{histIndex}.x);
+            xlength = length(obj.data{histIndex}.x)
         end
         
         %-------------------------------------------------------------------------%
@@ -115,6 +137,11 @@ switch orientation
        
         %-------------------------------------------------------------------------%
         
+        %-layout bargap-%
+        obj.layout.bargap = (hist_data.XData(3,1)-hist_data.XData(2,2))/(hist_data.XData(3,1)-hist_data.XData(2,1));
+        
+        %-------------------------------------------------------------------------%
+        
         
     case 'h'
         
@@ -122,8 +149,7 @@ switch orientation
         ydata = mean(hist_data.YData(2:3,:));
         
         %-------------------------------------------------------------------------%
-        
-        %-hist y data-%
+
         ylength = 0;
         for d = 1:length(ydata)
             obj.data{histIndex}.y(ylength + 1: ylength + hist_data.XData(2,d)) = repmat(ydata(d),1,hist_data.XData(2,d));
@@ -144,6 +170,11 @@ switch orientation
         obj.data{histIndex}.ybins = ybins; 
        
         %-------------------------------------------------------------------------%
+        
+        %-layout bargap-%
+        obj.layout.bargap = (hist_data.XData(3,1)-hist_data.XData(2,2))/(hist_data.XData(3,1)-hist_data.XData(2,1));
+        
+        %-------------------------------------------------------------------------%
              
 end
 
@@ -159,11 +190,6 @@ obj.layout.barmode = 'group';
 
 %-------------------------------------------------------------------------%
 
-%-layout bargap-%
-obj.layout.bargap = (hist_data.XData(3,1)-hist_data.XData(2,2))/(hist_data.XData(3,1)-hist_data.XData(2,1));
-
-%-------------------------------------------------------------------------%
-
 %-hist line width-%
 obj.data{histIndex}.marker.line.width = hist_data.LineWidth;
 
@@ -176,7 +202,6 @@ end
 
 %-------------------------------------------------------------------------%
 
-%-hist marker-%
 obj.data{histIndex}.marker = extractPatchFace(hist_data);
 
 %-------------------------------------------------------------------------%
