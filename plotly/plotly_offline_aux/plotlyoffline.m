@@ -71,6 +71,7 @@ function response = plotlyoffline(plotlyfig)
     % template entire script
     offline_script = [dep_script env_script plotly_script]; 
     filename = plotlyfig.PlotOptions.FileName; 
+    if iscellstr(filename), filename = sprintf('%s ', filename{:}); end
     
     % remove the whitespace from the filename
     clean_filename = filename(filename~=' '); 
