@@ -77,7 +77,7 @@ function response = plotlyoffline(plotlyfig)
     html_filename = [clean_filename '.html'];
     
     % save the html file in the working directory
-    plotly_offline_file = fullfile(pwd, html_filename); 
+    plotly_offline_file = fullfile(plotlyfig.PlotOptions.SaveFolder, html_filename); 
     file_id = fopen(plotly_offline_file, 'w');
     fprintf(file_id, offline_script); 
     fclose(file_id); 

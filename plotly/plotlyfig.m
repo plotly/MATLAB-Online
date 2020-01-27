@@ -65,7 +65,8 @@ classdef plotlyfig < handle
             obj.PlotOptions.ShowLinkText = true; 
             obj.PlotOptions.LinkText = obj.get_link_text; 
             obj.PlotOptions.IncludePlotlyjs = true;
-            
+            obj.PlotOptions.SaveFolder = pwd;
+
             %-PlotlyDefaults-%
             obj.PlotlyDefaults.MinTitleMargin = 80;
             obj.PlotlyDefaults.TitleHeight = 0.01;
@@ -151,6 +152,9 @@ classdef plotlyfig < handle
                             obj.PlotOptions.FileName = varargin{a+1};
                             % overwrite if filename provided
                             obj.PlotOptions.FileOpt = 'overwrite';
+                        end
+                        if(strcmpi(varargin{a},'savefolder'))
+                            obj.PlotOptions.SaveFolder = varargin{a+1};
                         end
                         if(strcmpi(varargin{a},'fileopt'))
                             obj.PlotOptions.FileOpt = varargin{a+1};
